@@ -1,5 +1,5 @@
 class PrototypesController < ApplicationController
-  before_action :authenticate_user!, expect: [:index, :show, :new]
+  before_action :authenticate_user!, only: [:destroy, :new, :edit]
   before_action :move_to_index, only: [:edit, :update, :destroy]
 
   def index
@@ -11,10 +11,11 @@ class PrototypesController < ApplicationController
   end
 
   def create
-    if Prototype.create(prototype_params)
+    @prototype = Prototype.create(prototype_params)
+    if @prototype.save
       redirect_to root_path
     else
-      render :new
+      render new_prototype_path
     end
   end
 
